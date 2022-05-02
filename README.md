@@ -2,8 +2,10 @@
 
 ### https://www.ebi.ac.uk/Tools/msa/clustalo/
 ### http://www.clustal.org/
+### https://clades.nextstrain.org/
 
 
+## Download
 ### Download Clustal Omega
 `http://www.clustal.org/omega/`
 
@@ -13,7 +15,14 @@ curl -fsSL "https://github.com/nextstrain/nextclade/releases/latest/download/nex
 
 ```
 
+## Tutorial
+### https://docs.nextstrain.org/projects/nextclade/en/stable/index.html
+### https://github.com/nextstrain/nextclade
+### https://github.com/nextstrain/nextclade/tree/master/packages/nextalign
+### https://github.com/nextstrain/nextclade/tree/master/packages/nextalign_cli
 
+## Test Data
+### https://github.com/nextstrain/nextclade/tree/master/data/sars-cov-2
 
 ## Nextalign README
 ```
