@@ -2,9 +2,6 @@
 
 # Copyright (C) 2019 Thermo Fisher Scientific. All Rights Reserved
 
-# vcMerge plugin on Genexus
-# 2022/3/29
-
 import glob
 import sys
 import subprocess
@@ -20,9 +17,10 @@ from django.template.loader import render_to_string
 
 
 
-class vcMerge_GX(IonPlugin):
-  version = '1.0.0.0'
-  author = "longfei.fu@thermofisher.com"
+class ClustalO(IonPlugin):
+  version  = '1.0.0.0'
+  author   = "longfei.fu@thermofisher.com"
+  date     = "2022-5-6"
   runtypes = [RunType.FULLCHIP, RunType.THUMB, RunType.COMPOSITE]
 
   # a simple cached version of the start plugin property
@@ -30,35 +28,34 @@ class vcMerge_GX(IonPlugin):
   def startplugin_json(self):
     return self.startplugin
 
-  def merge(self):
+  def align(self):
     plugin_result_dir = self.startplugin_json['runinfo']['plugin'].get('results_dir')
-    lane_info_dir     = self.startplugin_json['runinfo'].get('analysis_dir')
-    results_name      = self.startplugin_json['expmeta'].get('results_name')
-    outfile = "%s/%s.TSVC_variants.merged.vcf.xls" % (plugin_result_dir,results_name)
-
-    print "plugin result dir is: %s" % (plugin_result_dir)
-    print "lane dir is: %s" % (lane_info_dir)
-    print "outfile is: %s" % (outfile)
-
+    cons_dir  = self.startplugin_json['pluginconfig'].get('variant_caller_path')
+    cons_name = os.path.basename(cons_dir) # generateConsensus_out.xxx
+    
     abs_path = os.path.abspath(__file__)
     this_dir = os.path.dirname(abs_path)
-    #cmd = "perl %s/merge_main.pl %s %s" % (this_dir,lane_info_dir,plugin_result_dir)
-    cmd = "perl %s/merge_main.pl %s %s" % (this_dir,lane_info_dir,outfile)
-    print "cmd is %s" % (cmd)
+    
+    print "input cons dir is: %s" % (cons_dir)
+    print "output dir is: %s" % (plugin_result_dir)
 
-    print "Start running the vcMerge_GX plugin."
+    cmd = "perl %s/ClustalO_pipeline.pl %s %s" (this_dir,cons_dir,plugin_result_dir)
+    print "cmd is: %s" % (cmd)
+    print "Start align..."
     os.system(cmd)
-    print "Finished the vcMerge_GX plugin."
+
 
   def launch(self,data=None):
-    self.merge()
-    with open("vcMerge_GX_block.html","w") as f:
-      f.write('<html><body>To download: "Right Click" -> "Save Link As..."<br>\n')
-      for merge_vcf in glob.glob('*.merged.vcf.xls'):
-        print(merge_vcf)
+    self.align()
+    print "Finished align..."
+
+    with open("ClustalO_block.html","w") as f:
+      f.write('<html><body>Click link to see ClustalO alignment result<br>\n')
+      for aln in glob.glob('*.ClustalO.fasta'):
+        print(aln)
         f.write('<a href="%s">%s</a><br>\n'
-                % (merge_vcf,merge_vcf))
-        f.write('</body></html>\n')
+              % (os.path.join(net_location,url_path,aln),aln))
+        f.write('</body></html>')
     
     return True
 
