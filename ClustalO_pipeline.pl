@@ -9,9 +9,36 @@ my ($cons_dir,$outdir) = @ARGV;
 my @cons_fa = glob "$cons_dir/*.consensus.fasta";
 my $cons_fa = $cons_fa[0];
 
+if (!-e $cons_fa){
+	die "can not find $cons_fa file\n";
+	exit;
+}
+
+# ">Sample 265__2019-nCoV" => ">Sample_265__2019-nCoV"
+my $cons_fa_new = "$outdir/cons.fa.new";
+open O, ">$cons_fa_new" or die;
+
+open IN, "$cons_fa" or die;
+while (<IN>){
+	chomp;
+	if (/^>/){
+		if (/\s/){
+			my @val = split /\s+/, $_;
+			my $val = join("_",@val);
+			print O "$val\n";
+		}else{
+			print O "$_\n";
+		}
+	}else{
+		print O "$_\n";
+	}
+}
+close IN;
+close O;
+
 # make input.fa
 my $ref_fa = "$Bin/test/data/Ion_AmpliSeq_SARS-CoV-2-Insight.Reference.fa";
-my $cmd = "cat $ref_fa $cons_fa >$outdir/input.fa";
+my $cmd = "cat $ref_fa $cons_fa_new >$outdir/input.fa";
 systme($cmd);
 
 # do align
