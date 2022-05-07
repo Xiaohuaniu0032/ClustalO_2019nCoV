@@ -28,11 +28,12 @@ class ClustalO(IonPlugin):
   def startplugin_json(self):
     return self.startplugin
 
-  def align(self):
-    plugin_result_dir = self.startplugin_json['runinfo']['plugin'].get('results_dir')
-    cons_dir  = self.startplugin_json['pluginconfig'].get('variant_caller_path')
-    cons_name = os.path.basename(cons_dir) # generateConsensus_out.xxx
-    
+  net_location = self.startplugin_json['runinfo'][net_location]
+  plugin_result_dir = self.startplugin_json['runinfo']['plugin'].get('results_dir')
+  cons_dir  = self.startplugin_json['pluginconfig'].get('variant_caller_path') # here 'variant_caller_path' should be generateConsensus path
+  cons_name = os.path.basename(cons_dir) # generateConsensus_out.xxx
+  
+  def align(self):  
     abs_path = os.path.abspath(__file__)
     this_dir = os.path.dirname(abs_path)
     
@@ -51,9 +52,10 @@ class ClustalO(IonPlugin):
 
     with open("ClustalO_block.html","w") as f:
       f.write('<html><body>Click link to see ClustalO alignment result<br>\n')
+      f.write('<html><body>generateConsensus Report: %s % (cons_name)')
       for aln in glob.glob('*.ClustalO.fasta'):
         print(aln)
-        f.write('<a href="%s">%s</a><br>\n'
+        f.write('<a href="%s" target="_blank">%s</a><br>\n'
               % (os.path.join(net_location,url_path,aln),aln))
         f.write('</body></html>')
     
