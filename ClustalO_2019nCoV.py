@@ -39,19 +39,18 @@ class ClustalO_2019nCoV(IonPlugin):
     print "input cons dir is: %s" % (cons_dir)
     print "output dir is: %s" % (plugin_result_dir)
 
-    cmd = "perl %s/ClustalO_pipeline.pl %s %s" (this_dir,cons_dir,plugin_result_dir)
+    cmd = "perl %s/ClustalO_pipeline.pl %s %s" % (this_dir,cons_dir,plugin_result_dir)
     print "cmd is: %s" % (cmd)
     print "Start align..."
     os.system(cmd)
     print "Finished align..."
-
+    url_root = self.startplugin_json['runinfo']['url_root'] + '/plugin_out/%s' % (cons_name)
     with open("ClustalO_block.html","w") as f:
-      f.write('<html><body>Click link to see ClustalO alignment result<br>\n')
-      f.write('<html><body>generateConsensus Report: %s % (cons_name)')
+      f.write('<html><body>generateConsensus Report: %s\n' % (cons_name))
       for aln in glob.glob('*.ClustalO.fasta'):
         print(aln)
         f.write('<a href="%s" target="_blank">%s</a><br>\n'
-              % (os.path.join(net_location,plugin_result_dir,aln),aln))
+              % (os.path.join(net_location,url_root,aln),aln))
         f.write('</body></html>')
     
     return True

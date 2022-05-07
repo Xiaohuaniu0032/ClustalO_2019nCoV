@@ -39,13 +39,13 @@ close O;
 # make input.fa
 my $ref_fa = "$Bin/test/data/Ion_AmpliSeq_SARS-CoV-2-Insight.Reference.fa";
 my $cmd = "cat $ref_fa $cons_fa_new >$outdir/input.fa";
-systme($cmd);
+system($cmd);
 
 # do align
 my $input_fa = "$outdir/input.fa";
 my $out_temp = "$outdir/clustalo.out.aln.fa";
 $cmd = "$Bin/bin/clustalo -i $input_fa -o $out_temp --outfmt=clu";
-smstem($cmd);
+system($cmd);
 
 # add pos info
 my $outdir_basename = basename($outdir);

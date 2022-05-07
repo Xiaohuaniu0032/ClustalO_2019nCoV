@@ -239,24 +239,11 @@
         alert("This plugin cannot be run without a valid variantCaller plugin result run and selected.");
         return false;
       }
-      
-      // load and validate CSV file content or confirm launch without
-      csvfile = document.getElementById("bc2fa").files[0];
-      if( !jQuery.isEmptyObject(csvfile) ) {
-        // hard to avoid async loading so immediately return and launch via callback
-        $("#bc2faFile").val(csvfile.name);
-        loadCSV(csvfile);
-      } else {
-        $("#bc2faFile").val("");
-        var msg = "With no Contig Name Mapping specified, all barcodes will be processed";
-        msg += "\nand resulting FASTA sequences will have named as <sample>__<contig>.";
-        msg += "\n\nDo you wish to continue?";
-        if( !confirm(msg) ) return false;
-        launchRun();
-      }
+      launchRun();
       return false;  // return state not important here
     });
-
+    
+    
     function launchRun() {
       obj = $('#generateConsensus').serializeObject();
       // insert barcode selection table if built by plugin.py
