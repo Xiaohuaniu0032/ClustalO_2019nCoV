@@ -1,0 +1,1 @@
+/data/fulongfei/git_repo/ClustalO_2019nCoV/bin/nextalign --in-order --sequences=Auto_SARS-CoV-2_Insight_Research_Panel_-_530-2022-4-13text-1_torrent-server_87.consensus.fasta --reference=../data/Ion_AmpliSeq_SARS-CoV-2-Insight.Reference.fa --output-dir=$PWD --output-basename=nextalign --include-reference
